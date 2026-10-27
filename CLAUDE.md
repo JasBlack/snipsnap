@@ -81,7 +81,8 @@ None. The app has no backend, API keys or config. `.env.example` exists only to 
 - Exact fps readout from the container; 4K scrubbing; Tactile Deck UI (purple/green).
 
 **Untested / unverified:**
-- Safari and Firefox; anything on macOS.
+- Firefox. Safari and Brave on macOS work (user-reported, not yet checked at frame level).
+- Mobile: no touch way to set in/out marks yet (needs right-click or `I`/`O` keys) — on-screen IN/OUT buttons would fix it.
 - Folder-picker export (`showDirectoryPicker`, used when exporting >5 clips in Chrome/Edge) — automated tests can't click the OS dialog.
 - Real camera footage (VFR phone video, HEVC, 10-bit) — tests used ffmpeg `lavfi` sources.
 
