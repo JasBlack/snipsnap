@@ -32,8 +32,8 @@
     display:flex;flex-direction:column;align-items:center;
     height:100vh;overflow-x:hidden;overflow-y:auto;
   }
-  /* page gradient is a pre-dithered bitmap (see bakeBackground): a live CSS
-     gradient gets re-dithered on every redraw and the bands shimmer (macOS) */
+  /* page background: flat colour + cutting-mat dot grid, drawn once into a canvas
+     (bakeBackground). No gradient — live CSS gradients shimmered on macOS */
   #bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
   button{font:inherit;letter-spacing:inherit;color:inherit;background:none;border:none;cursor:pointer}
   select{font:inherit;letter-spacing:.08em;background:var(--panel);color:var(--txt);border:none;border-radius:10px;box-shadow:inset 0 2px 5px rgba(0,0,0,.5);padding:6px 10px;font-size:11px;cursor:pointer}
@@ -305,7 +305,7 @@ const video = $('video');
 
 /* ================= dithered gradients ================= */
 // Chrome dithers CSS gradients each time it draws them, and on macOS it keeps
-// redrawing, so the dark bands visibly shimmer. Paint each gradient once into a
+// redrawing, so the dark bands visibly shimmer. Paint the key gradient once into a
 // bitmap with a fixed 8×8 ordered dither: every redraw then shows the same pixels.
 const BAYER8 = [0,32,8,40,2,34,10,42, 48,16,56,24,50,18,58,26, 12,44,4,36,14,46,6,38, 60,28,52,20,62,30,54,22,
                 3,35,11,43,1,33,9,41, 51,19,59,27,49,17,57,25, 15,47,7,39,13,45,5,37, 63,31,55,23,61,29,53,21];
@@ -328,9 +328,32 @@ function paintGradient(canvas, w, h, from, to, angleDeg) {
   }
   ctx.putImageData(img, 0, 0);
 }
-function bakeBackground() { // one canvas pixel per device pixel, so it's drawn 1:1
-  const dpr = window.devicePixelRatio || 1;
-  paintGradient($('bg'), Math.round(innerWidth * dpr), Math.round(innerHeight * dpr), '#26272b', '#202124', 180);
+// smooth value noise in [0,1] (fixed seed, so the pattern is the same every load)
+function dotNoise(x, y) {
+  const h = (i, j) => { let n = Math.imul(i, 374761393) + Math.imul(j, 668265263) ^ 0x5bd1e995; n = Math.imul(n ^ n >>> 13, 1274126177); return ((n ^ n >>> 16) >>> 0) / 4294967296; };
+  const i = Math.floor(x), j = Math.floor(y), fx = x - i, fy = y - j;
+  const sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+  const top = h(i, j) + (h(i + 1, j) - h(i, j)) * sx, bot = h(i, j + 1) + (h(i + 1, j + 1) - h(i, j + 1)) * sx;
+  return top + (bot - top) * sy;
+}
+function bakeBackground() { // cutting-mat dot grid; one canvas pixel per device pixel, so it's drawn 1:1
+  const dpr = window.devicePixelRatio || 1, canvas = $('bg');
+  canvas.width = Math.round(innerWidth * dpr); canvas.height = Math.round(innerHeight * dpr);
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#232427';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const step = 24, r = 1.6 * dpr; // CSS px between dots; dot radius
+  for (let gy = 0; gy * step < innerHeight + step; gy++) {
+    for (let gx = 0; gx * step < innerWidth + step; gx++) {
+      // brightness drifts in soft patches: some dots nearly vanish, others stand out
+      const n = 0.65 * dotNoise(gx / 9, gy / 9) + 0.35 * dotNoise(gx / 3.5 + 40, gy / 3.5 + 40);
+      const a = 0.02 + 0.14 * Math.pow(Math.min(Math.max((n - 0.25) / 0.6, 0), 1), 1.6);
+      ctx.fillStyle = `rgba(255,255,255,${a.toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc((gx * step + 12) * dpr, (gy * step + 12) * dpr, r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
 }
 bakeBackground();
 let bgTimer = 0;
