@@ -1,0 +1,19 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1200, "h": 800, "title": "Current — reference" },
+    { "file": "EditorialLight.dc.html", "x": 1320, "y": 0, "w": 1200, "h": 800, "title": "A — Editorial Light" },
+    { "file": "ProNLE.dc.html", "x": 2640, "y": 0, "w": 1200, "h": 800, "title": "B — Pro NLE" },
+    { "file": "Brutalist.dc.html", "x": 0, "y": 950, "w": 1200, "h": 800, "title": "C — Brutalist Poster" },
+    { "file": "TactileDeck.dc.html", "x": 1320, "y": 950, "w": 1200, "h": 800, "title": "D — Tactile Deck" },
+    { "file": "Terminal.dc.html", "x": 2640, "y": 950, "w": 1200, "h": 800, "title": "E — Phosphor Terminal" }
+  ],
+  "annotations": [
+    { "id": "note-current", "x": 0, "y": -150, "w": 300, "text": "CURRENT (reference)\nWhat you have today: dark, airy, glowing circles. Kept here to compare against." },
+    { "id": "note-a", "x": 1320, "y": -150, "w": 300, "text": "A — EDITORIAL LIGHT\nWarm paper, serif type, hairline rules; actions as an elegant side column.\nTradeoff: light UI around video makes footage judgment harder than a dark room." },
+    { "id": "note-b", "x": 2640, "y": -150, "w": 300, "text": "B — PRO NLE\nDense editor language: waveform strip, IN/OUT timecodes, codec chips, compact rect buttons. Most informative.\nTradeoff: busiest; loses the minimal charm." },
+    { "id": "note-c", "x": 0, "y": 1800, "w": 300, "text": "C — BRUTALIST POSTER\nHard borders, offset shadows, huge type, one loud red. Unmistakable, fun to share.\nTradeoff: loud personality — polarizing for a daily tool." },
+    { "id": "note-d", "x": 1320, "y": 1800, "w": 300, "text": "D — TACTILE DECK\nCamera-body hardware feel: embossed rounded keys, groove timeline, orange LED accents. Closest evolution of your current look.\nTradeoff: soft shadows need care to avoid mushiness at small sizes." },
+    { "id": "note-e", "x": 2640, "y": 1800, "w": 300, "text": "E — PHOSPHOR TERMINAL\nCRT green, monospace, ASCII timeline, keyboard-first labels. Niche and memorable.\nTradeoff: pure novelty aesthetic; timecode readability relies on mono discipline." }
+  ],
+  "launch": { "view": "canvas" }
+}

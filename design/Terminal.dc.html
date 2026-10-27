@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&amp;display=swap">
+  <style>
+    body { margin: 0; font-family: 'IBM Plex Mono', Consolas, monospace; }
+    a { color: #33ff66; } a:hover { color: #7dffa1; }
+  </style>
+</helmet>
+<div style="width: 1200px; height: 800px; background: #070c08; color: #33ff66; position: relative; display: flex; flex-direction: column; padding: 26px 34px; box-sizing: border-box; overflow: hidden;">
+  <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, rgba(0,0,0,0.22) 0 2px, transparent 2px 4px); pointer-events: none;"></div>
+  <div style="display: flex; justify-content: space-between; font-size: 13px; letter-spacing: 0.05em;">
+    <span style="font-weight: 600;">SNIPSNAP <span style="color: #1a8f3c;">v2.0</span> &mdash; FRAME/SNIP UTILITY</span>
+    <span style="color: #1a8f3c;">[ DROP FILE TO REPLACE ]</span>
+  </div>
+  <div style="border: 1px solid #1a8f3c; margin-top: 14px; padding: 3px;">
+    <div style="height: 400px; background: radial-gradient(ellipse at 45% 40%, #10331c 0%, #0a1f10 55%, #060f08 100%); display: flex; align-items: center; justify-content: center; position: relative;">
+      <div style="position: absolute; left: 10px; top: 8px; font-size: 11px; color: #1a8f3c;">REC&#9679; shoot_04.mp4</div>
+      <div style="position: absolute; right: 10px; top: 8px; font-size: 11px; color: #1a8f3c;">3840x2160 @ 29.97</div>
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#33ff66" stroke-width="1.2"><rect x="2.5" y="2.5" width="19" height="19"></rect><path d="M10 8.5v7l6-3.5z" fill="#33ff66" stroke="none"></path></svg>
+      <div style="position: absolute; left: 10px; bottom: 8px; font-size: 11px; color: #1a8f3c;">&gt; playhead 00:04:12:07_</div>
+    </div>
+  </div>
+  <div style="margin-top: 14px; font-size: 13px;">
+    <div style="display: flex; justify-content: space-between; color: #1a8f3c;">
+      <span>&#9484; TIMELINE &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9490;</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 0; margin: 6px 0; font-size: 15px; letter-spacing: -0.02em;">
+      <span style="color: #1a8f3c;">&#9474;</span>
+      <span style="flex: 1; white-space: nowrap; overflow: hidden;">&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9608;<span style="color: #ffee55;">[</span><span style="background: rgba(51,255,102,0.18);">&#9619;&#9619;&#9619;&#9619;&#9619;&#9608;&#9608;&#9619;&#9619;&#9619;&#9619;&#9619;&#9619;&#9619;</span><span style="color: #ffee55;">]</span>&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;&#9617;</span>
+      <span style="color: #1a8f3c;">&#9474;</span>
+    </div>
+    <div style="display: flex; justify-content: space-between; font-size: 12px;">
+      <span>T=00:04:12:07 / 00:19:58:12</span>
+      <span style="color: #ffee55;">IN=00:06:24:00 OUT=00:11:10:15 LEN=00:04:46:15</span>
+      <span style="color: #1a8f3c;">FPS=29.97 SRC=H264/AAC</span>
+    </div>
+  </div>
+  <div style="display: flex; gap: 14px; margin-top: 20px; font-size: 14px; font-weight: 600;">
+    <div style="border: 1px solid #33ff66; padding: 11px 20px;">[ F1 FIRST ]</div>
+    <div style="border: 1px solid #33ff66; padding: 11px 20px; background: rgba(51,255,102,0.1);">[ F2 FRAME ]</div>
+    <div style="border: 1px solid #33ff66; padding: 11px 20px;">[ F3 LAST ]</div>
+    <div style="flex: 1;"></div>
+    <div style="border: 1px solid #ffee55; color: #ffee55; padding: 11px 24px; background: rgba(255,238,85,0.08); box-shadow: 0 0 14px rgba(255,238,85,0.25);">[ &#8629; EXPORT SNIP ]</div>
+    <div style="border: 1px solid #1a8f3c; color: #1a8f3c; padding: 11px 20px;">[ ESC CLEAR ]</div>
+  </div>
+  <div style="display: flex; gap: 26px; margin-top: 16px; font-size: 12px; color: #1a8f3c;">
+    <span>IMG=<span style="color: #33ff66;">PNG</span></span>
+    <span>MODE=<span style="color: #33ff66;">FRAME-EXACT</span></span>
+    <span>AUDIO=<span style="color: #33ff66;">ON</span></span>
+    <span style="margin-left: auto;">SPACE=PLAY &#9666;&#9656;=STEP I/O=MARK RCLICK=MARKER</span>
+  </div>
+  <div style="margin-top: auto; font-size: 12px; color: #1a8f3c;">&gt; snip written: shoot_04_snip_001.mp4 [300 frames, frame-exact] <span style="background: #33ff66; color: #070c08;">&nbsp;OK&nbsp;</span><span style="color: #33ff66;">_</span></div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,26 @@
+# secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# dependencies / build output (none today, but keep them out if added)
+node_modules/
+dist/
+build/
+.vercel/
+.cache/
+.parcel-cache/
+
+# generated / local artifacts
+*.zip
+design/snipsnap-redesigns.html
+*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
