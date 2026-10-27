@@ -2,6 +2,8 @@
 
 Browser tool: grab still frames and snip sections from any video, at native resolution / fps / quality. Everything runs locally — no uploads.
 
+**Use it online: https://snap.jas.black** — or run it on your own machine:
+
 ## Run
 
 Needs Node installed (nodejs.org) — nothing else.
@@ -40,13 +42,6 @@ then open http://localhost:8123.
 
 ffmpeg.wasm is vendored in `ffmpeg/` (~64 MB, single- and multi-threaded cores) so snipping works offline.
 
-## Host online
+## Hosting
 
-Everything is static and client-side — videos never leave the visitor's browser. Deploy to Vercel (free hobby tier):
-
-```
-npx vercel --prod
-```
-
-`vercel.json` already sends the COOP/COEP headers the multithreaded encoder needs. Any other static host works too, as long as it can set those two headers.
-
+Live at **https://snap.jas.black** (GitHub Pages). It's a static site with no backend, so it works on any static host. Videos never leave the visitor's browser.

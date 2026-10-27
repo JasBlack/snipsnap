@@ -20,7 +20,10 @@ ffmpeg/             ffmpeg.wasm: single-threaded core, multithreaded core (-mt),
 serve.json          COOP/COEP headers for local `npx serve` (enables multithreaded ffmpeg)
 vercel.json         same headers for Vercel hosting
 start.bat           Windows launcher (npx serve on :8123 + opens browser)
-start.command       macOS launcher (run with `sh start.command`; LF line endings required)
+start.command       macOS launcher (run with `sh start.command`; LF line endings required, enforced in .gitattributes)
+coi-serviceworker.js coi-serviceworker 0.1.7 (MIT, vendored): adds COOP/COEP via a service worker where the host can't (GitHub Pages)
+CNAME               custom domain for GitHub Pages
+.nojekyll           serve files as-is on Pages (no Jekyll build)
 .claude/launch.json Claude Code preview config (same serve command)
 design/             UI exploration mockups (*.dc.html artboards + canvas.json); reference only, not used by the app
 README.md           user-facing how-to
@@ -58,9 +61,9 @@ Build: none. Deploy the folder as-is.
 
 ## Deployment
 
-- Target: static hosting. Planned domain: **snipsnap.jas.black** (DNS CNAME on `jas.black`).
+- Target: GitHub Pages at **snap.jas.black** (DNS: `CNAME snap -> jasblack.github.io` wherever jas.black's nameservers point).
 - **Vercel**: `npx vercel --prod` — `vercel.json` already sends COOP/COEP.
-- **GitHub Pages**: works, but Pages can't send custom headers → multithreaded ffmpeg is unavailable (the WebCodecs paths, i.e. most usage, are unaffected). Fix not yet done: add `coi-serviceworker` (one JS file + one script tag). Pages also needs a `CNAME` file containing the domain and "Enforce HTTPS" on — WebCodecs requires a secure context.
+- **GitHub Pages**: Settings → Pages → deploy from branch `main`, folder `/`. Pages can't send custom headers, so `coi-serviceworker.js` (first script in `index.html`) adds COOP/COEP; the first visit reloads once to activate it. It does nothing when the server already sends the headers (Vercel, `serve.json`). Keep "Enforce HTTPS" on — WebCodecs and service workers need a secure context.
 - Largest file is 32 MB (under GitHub's 100 MB limit).
 
 ## Environment variables
@@ -88,7 +91,9 @@ None. The app has no backend, API keys or config. `.env.example` exists only to 
 - Rotated (phone) video skips the hardware path and uses slower ffmpeg.wasm.
 - Black bars in a video are encoded in the file, not added by the app. A crop tool was discussed, not built.
 
-**Unfinished / ideas:** GitHub Pages + coi-serviceworker + custom domain; crop region for frames/snips; ML shot detection (e.g. TransNetV2) for dissolves.
+**Verified for Pages (headless Chromium, server without COOP/COEP):** service worker makes the page cross-origin isolated; webm scene detection + frame-exact export on the multithreaded ffmpeg core cut 3 scenes at the exact frames.
+
+**Unfinished / ideas:** crop region for frames/snips; ML shot detection (e.g. TransNetV2) for dissolves.
 
 ## Decisions & gotchas
 
