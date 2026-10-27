@@ -27,6 +27,7 @@ CNAME               custom domain for GitHub Pages
 .claude/launch.json Claude Code preview config (same serve command)
 design/             UI exploration mockups (*.dc.html artboards + canvas.json); reference only, not used by the app
 README.md           user-facing how-to
+LICENSE             MIT (the app itself; vendored libs keep their own licenses)
 ```
 
 ### Map of index.html (search for these names)

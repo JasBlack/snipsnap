@@ -45,3 +45,7 @@ ffmpeg.wasm is vendored in `ffmpeg/` (~64 MB, single- and multi-threaded cores) 
 ## Hosting
 
 Live at **https://snap.jas.black** (GitHub Pages). It's a static site with no backend, so it works on any static host. Videos never leave the visitor's browser.
+
+## License
+
+MIT — see [LICENSE](LICENSE). Bundled third-party code (`lib/`, `ffmpeg/`, `coi-serviceworker.js`) keeps its own license.
