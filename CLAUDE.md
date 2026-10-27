@@ -93,6 +93,8 @@ None. The app has no backend, API keys or config. `.env.example` exists only to 
 - Lossless copy snaps the start to the previous keyframe (by design; frame-exact is the default).
 - Hardware path passes audio through only if it's AAC; other audio codecs are silently dropped on that path.
 - Rotated (phone) video skips the hardware path and uses slower ffmpeg.wasm.
+- Browsers that can't decode a file's video codec (ProRes everywhere but Safari; HEVC in some Chromium builds, e.g. Brave) open it audio-only with no error event and `videoWidth` 0. `explainNoPicture` then names the codec (from the moov via `readMoov`; video track found by `hdlr` = `vide`, since mp4box files ProRes under "metadata") and says to use Safari/Chrome or export H.264 from QuickTime. No in-browser transcode for preview (too slow for 4K).
+- Snips from far into huge files are slow (~45 s for 2 s at the end of a 5.6 GB 1080p60 .mov in headless Chromium): `demuxMp4` streams from byte 0 instead of seeking to the keyframe before the range. Works, just slow — fix candidate.
 - Black bars in a video are encoded in the file, not added by the app. A crop tool was discussed, not built.
 
 **Verified for Pages (headless Chromium, server without COOP/COEP):** service worker makes the page cross-origin isolated; webm scene detection + frame-exact export on the multithreaded ffmpeg core cut 3 scenes at the exact frames.

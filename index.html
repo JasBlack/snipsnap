@@ -80,6 +80,10 @@
   #landing.hidden{display:none}
 
   #videoWrap{margin-top:8px;width:100%;flex:1;min-height:120px;display:flex;justify-content:center;align-items:center;overflow:hidden}
+  #noPicture{display:none;max-width:600px;padding:26px 32px;border-radius:18px;background:var(--panel);box-shadow:var(--emboss);text-align:center;font-size:11px;line-height:1.9;letter-spacing:.14em;color:var(--txt)}
+  #noPicture.show{display:block}
+  #videoWrap:has(#noPicture.show) #videoShell{display:none}
+  #noPicture b{display:block;margin-bottom:8px;color:var(--accent);font-weight:600}
   #videoShell{border-radius:16px;overflow:hidden;background:#17181c;box-shadow:inset 0 2px 6px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.05);display:flex}
   video{background:#000;outline:none;display:block}
 
@@ -226,7 +230,7 @@
 </div>
 
 <div id="workspace">
-  <div id="videoWrap"><div id="videoShell"><video id="video" playsinline></video></div></div>
+  <div id="videoWrap"><div id="videoShell"><video id="video" playsinline></video></div><div id="noPicture" role="alert"></div></div>
 
   <div id="transport">
     <div id="transportRow">
@@ -483,12 +487,14 @@ function loadVideo(file) {
   state.userTouched = false;
   state.sceneData = null;
   clearMarks(true);
+  $('noPicture').classList.remove('show');
 
   video.src = state.url;
   video.addEventListener('loadedmetadata', () => {
     state.duration = video.duration;
     $('landing').classList.add('hidden');
     $('workspace').classList.add('active');
+    if (!video.videoWidth) explainNoPicture();
     updateSrcInfo();
     updateTimecode();
     probeFps().then(ok => { if (!ok) estimateFps(); }); // container truth first, timing estimate as fallback
@@ -496,6 +502,42 @@ function loadVideo(file) {
   video.addEventListener('error', () => {
     toast('COULD NOT DECODE THIS FILE IN THE BROWSER', true);
   }, { once: true });
+}
+
+/* A browser that can't decode a file's video codec often still opens it: it plays
+   the audio only, fires no error, and videoWidth stays 0. Say why and what to do
+   instead of showing an empty editor. (Typical: ProRes or HEVC .mov from a Mac.) */
+const CODEC_NAMES = [[/^(apc[hnso]|ap4[hx])/, 'APPLE PRORES'], [/^(hvc1|hev1)/, 'HEVC (H.265)'],
+                     [/^av01/, 'AV1'], [/^vp09/, 'VP9'], [/^avc[13]/, 'H.264']];
+async function explainNoPicture() {
+  const myFile = state.file;
+  let moov = null;
+  try { moov = await readMoov(myFile); } catch (e) {}
+  if (state.file !== myFile) return;
+  // by handler, not info.videoTracks: mp4box files ProRes under "metadata"
+  const vt = moov && moov.info.tracks.find(t => {
+    try { return moov.mp4.getTrackById(t.id).mdia.hdlr.handler === 'vide'; } catch (e) { return false; }
+  });
+  const tag = vt ? String(vt.codec || '') : '';
+  const name = (CODEC_NAMES.find(([re]) => re.test(tag)) || [null, tag.toUpperCase().slice(0, 24)])[1];
+  const convert = 'OR CONVERT IT IN QUICKTIME PLAYER: FILE → EXPORT AS → CHOOSE THE SIZE → GREATER COMPATIBILITY (H.264).';
+  let head, body;
+  if (moov && !vt) {
+    head = 'NO VIDEO TRACK IN THIS FILE';
+    body = 'IT ONLY CONTAINS AUDIO.';
+  } else if (name === 'APPLE PRORES') {
+    head = 'THIS VIDEO IS APPLE PRORES';
+    body = 'ONLY SAFARI CAN PLAY PRORES. OPEN SNIPSNAP IN SAFARI, ' + convert;
+  } else if (name) {
+    head = `THIS BROWSER CAN'T DECODE ${name} VIDEO`;
+    body = 'TRY SAFARI OR CHROME, ' + convert;
+  } else {
+    head = `THIS BROWSER CAN'T SHOW THIS VIDEO`;
+    body = 'ITS VIDEO FORMAT ISN\'T SUPPORTED HERE. TRY SAFARI OR CHROME, ' + convert;
+  }
+  const el = $('noPicture');
+  el.replaceChildren(Object.assign(document.createElement('b'), { textContent: head }), body);
+  el.classList.add('show');
 }
 
 /* size the video element to exactly fit the wrap while keeping aspect,
@@ -541,26 +583,32 @@ function applyFps(fps, source) {
 
 /* exact fps from the mp4 container: frame count / media duration out of moov.
    No playback measurement involved, so it can't be skewed by dropped frames. */
+async function readMoov(file) { // → { mp4, info } for mp4/mov/m4v, else null
+  if (!/^(mp4|mov|m4v)$/.test(state.ext)) return null;
+  await loadScript('lib/mp4box.all.min.js');
+  const mp4 = MP4Box.createFile();
+  let info = null;
+  mp4.onReady = i => { info = i; };
+  mp4.onError = () => {};
+  const CHUNK = 4 << 20;
+  let offset = 0, reads = 0;
+  // mp4box jumps over media data to wherever the moov is (front or back of
+  // the file), so this reads a couple of slices rather than the whole file
+  while (offset < file.size && !info && reads++ < 32) {
+    const buf = await file.slice(offset, offset + CHUNK).arrayBuffer();
+    buf.fileStart = offset;
+    const next = mp4.appendBuffer(buf);
+    offset = typeof next === 'number' && next > offset + buf.byteLength ? next : offset + buf.byteLength;
+  }
+  return info ? { mp4, info } : null;
+}
+
 async function probeFps() {
-  if (!/^(mp4|mov|m4v)$/.test(state.ext)) return false;
   const myFile = state.file;
   try {
-    await loadScript('lib/mp4box.all.min.js');
-    const mp4 = MP4Box.createFile();
-    let info = null;
-    mp4.onReady = i => { info = i; };
-    mp4.onError = () => {};
-    const CHUNK = 4 << 20;
-    let offset = 0, reads = 0;
-    // mp4box jumps over media data to wherever the moov is (front or back of
-    // the file), so this reads a couple of slices rather than the whole file
-    while (offset < myFile.size && !info && reads++ < 32) {
-      const buf = await myFile.slice(offset, offset + CHUNK).arrayBuffer();
-      buf.fileStart = offset;
-      const next = mp4.appendBuffer(buf);
-      offset = typeof next === 'number' && next > offset + buf.byteLength ? next : offset + buf.byteLength;
-    }
-    if (!info || state.file !== myFile) return false;
+    const moov = await readMoov(myFile);
+    if (!moov || state.file !== myFile) return false;
+    const { mp4, info } = moov;
     const vt = info.videoTracks && info.videoTracks[0];
     if (!vt || !vt.nb_samples) return false;
     // average frame delta from the stts table: exact for constant-rate video even
