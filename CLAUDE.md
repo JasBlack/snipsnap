@@ -28,6 +28,8 @@ CNAME               custom domain for GitHub Pages
 design/             UI exploration mockups (*.dc.html artboards + canvas.json); reference only, not used by the app
 README.md           user-facing how-to
 LICENSE             MIT (the app itself; vendored libs keep their own licenses)
+favicon.svg/.ico, apple-touch-icon.png  icons (purple + green clip split by a cut; touch icon is full-bleed, iOS rounds it)
+og.png              1200×630 link-preview card (og:/twitter: meta in index.html use absolute snap.jas.black URLs)
 ```
 
 ### Map of index.html (search for these names)
