@@ -1,6 +1,3 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#232427"/>
-  <rect x="8" y="22" width="25" height="20" rx="5" fill="#9d7bff"/>
-  <rect x="39" y="22" width="17" height="20" rx="5" fill="#3ddc97"/>
-  <rect x="34.5" y="13" width="3" height="38" rx="1.5" fill="#e6e8ee"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="pg" x1="0" y1="64" x2="64" y2="0" gradientUnits="userSpaceOnUse"><stop offset=".15" stop-color="#922cff"/><stop offset=".45" stop-color="#c855f5"/><stop offset=".8" stop-color="#3dfea0"/></linearGradient>
+<linearGradient id="pgv" x1="0" y1="60" x2="0" y2="4" gradientUnits="userSpaceOnUse"><stop offset=".05" stop-color="#922cff"/><stop offset=".45" stop-color="#c855f5"/><stop offset=".95" stop-color="#3dfea0"/></linearGradient>
+<linearGradient id="ph" x1="8" y1="0" x2="56" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#922cff"/><stop offset=".5" stop-color="#c855f5"/><stop offset="1" stop-color="#3dfea0"/></linearGradient><clipPath id="clip"><rect x="2" y="2" width="60" height="60" rx="13"/></clipPath></defs><rect x="1" y="1" width="62" height="62" rx="14" fill="#0b0b0c" stroke="#2c2c2f" stroke-width="2"/><rect x="8" y="22" width="25" height="20" rx="5" fill="#a142ff"/><rect x="39" y="22" width="17" height="20" rx="5" fill="#3dfea0"/><rect x="34.5" y="13" width="3" height="38" rx="1.5" fill="#fff"/></svg>
