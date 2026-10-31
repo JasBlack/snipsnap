@@ -55,20 +55,7 @@
   select{font:inherit;letter-spacing:.08em;background:var(--panel);color:var(--txt);border:none;border-radius:10px;box-shadow:inset 0 2px 5px rgba(0,0,0,.5);padding:6px 10px;font-size:11px;cursor:pointer}
   select:focus{outline:1px solid var(--dim)}
 
-  /* top bar, laid out like the other JAS.BLACK tools: title + lights | (the page's own keys stay below) | open */
-  header{width:100%;height:64px;margin:0 0 6px;padding:0 24px;flex:none;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:14px}
-  header .hl,header .hr{display:flex;align-items:center;gap:16px;min-width:0}
-  header .hr{justify-content:flex-end}
-  header .status{display:flex;gap:14px;font-size:10px;letter-spacing:.14em;color:var(--dim)}
-  header .status span{display:flex;gap:7px;align-items:center}
-  header .led{display:inline-block;width:6px;height:6px;border-radius:50%;background:#3a3d44;transition:background .2s,box-shadow .2s}
-  header .led.on{background:var(--green);box-shadow:0 0 6px var(--green)}
-  .topKey{font-size:10px;font-weight:600;letter-spacing:.2em;color:var(--txt);height:36px;padding:0 16px;border-radius:12px;
-    background:var(--keyface);box-shadow:4px 4px 9px rgba(0,0,0,.5),-3px -3px 8px rgba(255,255,255,.045);transition:box-shadow .2s,transform .1s}
-  .topKey:hover{color:var(--accent);box-shadow:4px 4px 10px rgba(0,0,0,.55),-3px -3px 8px rgba(255,255,255,.055),0 0 14px rgba(157,123,255,.15)}
-  .topKey:active{transform:scale(.97)}
-  .topKey:focus-visible{outline:1px solid var(--dim);outline-offset:2px}
-  @media (max-width:560px){ header{padding:0 14px} header .status{display:none} }
+  header{margin:16px 0 2px;flex:none;display:flex;align-items:center;gap:12px}
   /* the title: Archivo 800, 13px, .32em, the same in every JAS.BLACK tool (font vendored in lib/, works offline) */
   @font-face{font-family:Archivo;src:url('lib/archivo-800.ttf') format('truetype');font-weight:800;font-display:swap}
   header h1{font:800 13px 'Archivo',sans-serif;letter-spacing:.32em;margin-right:-.32em;color:var(--accent);white-space:nowrap;cursor:default}
@@ -232,15 +219,7 @@
 <canvas id="bg" aria-hidden="true"></canvas>
 
 <header>
-  <div class="hl">
-    <h1>SNIPSNAP</h1>
-    <div class="status" aria-label="Status">
-      <span title="a video is open"><i class="led" id="ledVideo"></i>VIDEO</span>
-      <span title="a snip, frame batch or scene split is running"><i class="led" id="ledJob"></i>EXPORT</span>
-    </div>
-  </div>
-  <div class="hc"></div>
-  <div class="hr"><button class="topKey" id="openBtn" title="Open another video (or drop one anywhere)">OPEN VIDEO</button></div>
+  <h1>SNIPSNAP</h1>
 </header>
 
 <div id="landing">
@@ -465,7 +444,6 @@ function toast(msg, isErr) {
 
 /* ================= loading videos ================= */
 $('chooseBtn').addEventListener('click', () => $('fileInput').click());
-$('openBtn').addEventListener('click', () => $('fileInput').click());
 $('fileInput').addEventListener('change', e => {
   if (e.target.files[0]) loadVideo(e.target.files[0]);
   e.target.value = '';
@@ -514,7 +492,6 @@ function loadVideo(file) {
     state.duration = video.duration;
     $('landing').classList.add('hidden');
     $('workspace').classList.add('active');
-    $('ledVideo').classList.add('on');
     if (!video.videoWidth) explainNoPicture();
     updateSrcInfo();
     updateTimecode();
@@ -1063,13 +1040,11 @@ function setProgress(label, frac, log) {
 let currentJob = null;
 function startJob() {
   currentJob = { cancelled: false };
-  $('ledJob').classList.add('on');
   $('progressCancel').style.display = 'inline-block';
   return currentJob;
 }
 function endJob() {
   currentJob = null;
-  $('ledJob').classList.remove('on');
   $('progressCancel').style.display = 'none';
 }
 $('progressCancel').addEventListener('click', () => {
