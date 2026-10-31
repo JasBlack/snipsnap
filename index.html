@@ -56,9 +56,9 @@
   select:focus{outline:1px solid var(--dim)}
 
   header{margin:16px 0 2px;flex:none;display:flex;align-items:center;gap:12px}
-  header h1{font-size:15px;font-weight:600;letter-spacing:.28em;color:var(--accent)}
-  .led{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
-  .led.off{background:#3a3d44;box-shadow:none}
+  /* the title: Archivo 800, 13px, .32em, the same in every JAS.BLACK tool (font vendored in lib/, works offline) */
+  @font-face{font-family:Archivo;src:url('lib/archivo-800.ttf') format('truetype');font-weight:800;font-display:swap}
+  header h1{font:800 13px 'Archivo',sans-serif;letter-spacing:.32em;margin-right:-.32em;color:var(--accent);white-space:nowrap;cursor:default}
 
   /* ---------- landing ---------- */
   #landing{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:34px;padding-bottom:8vh}
@@ -219,9 +219,7 @@
 <canvas id="bg" aria-hidden="true"></canvas>
 
 <header>
-  <div class="led"></div>
   <h1>SNIPSNAP</h1>
-  <div class="led off"></div>
 </header>
 
 <div id="landing">
@@ -1539,6 +1537,16 @@ $('sceneSens').addEventListener('input', e => {
   applyScenes(false);
 });
 $('sceneSens').addEventListener('change', saveSettings);
+// right-click any slider: back to its default (the value written in the HTML)
+document.addEventListener('contextmenu', e => {
+  const el = e.target;
+  if (e.defaultPrevented || !(el instanceof HTMLInputElement) || el.type !== 'range' || el.disabled) return;
+  e.preventDefault();
+  if (el.value === el.defaultValue) return;
+  el.value = el.defaultValue;
+  el.dispatchEvent(new Event('input', { bubbles: true }));
+  el.dispatchEvent(new Event('change', { bubbles: true }));
+});
 
 /* split the range under t into two (scene mode "add cut"), on a real frame boundary */
 function splitAt(t) {

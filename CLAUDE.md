@@ -15,7 +15,7 @@ Browser-only video tool: drop in any video and grab still frames at native resol
 
 ```
 index.html          the whole app (UI, styles, logic)
-lib/                mp4box.js + mp4-muxer (vendored, minified)
+lib/                mp4box.js + mp4-muxer (vendored, minified); archivo-800.ttf (title font, OFL)
 ffmpeg/             ffmpeg.wasm: single-threaded core, multithreaded core (-mt), loader + util (~64 MB)
 serve.json          COOP/COEP headers for local `npx serve` (enables multithreaded ffmpeg)
 vercel.json         same headers for Vercel hosting
